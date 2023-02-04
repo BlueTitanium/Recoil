@@ -6,6 +6,7 @@ public class AmmoUI : MonoBehaviour
 {
     public GameObject[] ammoIcons;
     int curIndex = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,15 +21,22 @@ public class AmmoUI : MonoBehaviour
 
     public void removeAmmo()
     {
-        ammoIcons[curIndex].SetActive(false);
+        ammoIcons[curIndex].GetComponent<Animation>().Play("Ammo_Drop");
+        //ammoIcons[curIndex].SetActive(false);
         curIndex++;
     }
 
-    public void reload()
+    public IEnumerator reload(float t)
     {
+        while(curIndex < ammoIcons.Length)
+        {
+            removeAmmo();
+        }
+        yield return new WaitForSeconds(t);
         foreach(var a in ammoIcons)
         {
-            a.SetActive(true);
+            a.GetComponent<Animation>().Play("Ammo_Back");
+            //a.SetActive(true);
         }
         curIndex = 0;
     }

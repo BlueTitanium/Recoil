@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6af5378ac02f7be4f9482f0e203cce8b
+guid: c4a89d1fdf40b7a4fa1fc541b3a7f16d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,97 +117,118 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: HealthBar_0
+      name: playerSprites_0
       rect:
         serializedVersion: 2
-        x: 7
-        y: 286
-        width: 8
-        height: 7
+        x: 2
+        y: 272
+        width: 28
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b7490841b5855404ea5fa4fbcc92a46f
-      internalID: 2048183870
+      spriteID: 840743bd700f731499144dc1c92afd76
+      internalID: 1642461230
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HealthBar_1
+      name: playerSprites_1
       rect:
         serializedVersion: 2
-        x: 19
-        y: 286
-        width: 8
-        height: 7
+        x: 35
+        y: 272
+        width: 27
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: be16f089e17f0b04d9e3b64df447918f
-      internalID: 984613743
+      spriteID: ec9f58759feb25440b3b0b9e1af09ef0
+      internalID: 1579569654
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HealthBar_2
+      name: playerSprites_2
       rect:
         serializedVersion: 2
-        x: 104
-        y: 205
-        width: 188
-        height: 95
+        x: 68
+        y: 272
+        width: 27
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0ce5cca8311be014bbd7e7e5be81a105
-      internalID: -78802441
+      spriteID: 3de7f08ff244cef468b3576f2f66e8e0
+      internalID: 606115156
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HealthBar_3
+      name: playerSprites_3
       rect:
         serializedVersion: 2
-        x: 15
-        y: 173
-        width: 73
-        height: 23
+        x: 101
+        y: 272
+        width: 27
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5f9b14947ad375740a1b6c6b82932f62
-      internalID: -1963002418
+      spriteID: 161ed31953a7e344ba77b181bdb2a546
+      internalID: -1702202644
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: HealthBar_4
+      name: playerSprites_4
       rect:
         serializedVersion: 2
-        x: 106
-        y: 133
-        width: 174
-        height: 53
+        x: 167
+        y: 270
+        width: 28
+        height: 28
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 87f63f9b554e6214e980f1c998e1c016
+      internalID: -1640735358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: playerSprites_5
+      rect:
+        serializedVersion: 2
+        x: 146
+        y: 268
+        width: 5
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,8 +236,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1cfab238d353c384383e1da75a0a9386
-      internalID: -804556110
+      spriteID: 8e2de85b5a3cf2b4db6dfd5a4c9e3403
+      internalID: 1416737248
       vertices: []
       indices: 
       edges: []
@@ -232,11 +253,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      HealthBar_3: -1963002418
-      HealthBar_0: 2048183870
-      HealthBar_4: -804556110
-      HealthBar_2: -78802441
-      HealthBar_1: 984613743
+      playerSprites_5: 1416737248
+      playerSprites_3: -1702202644
+      playerSprites_4: -1640735358
+      playerSprites_0: 1642461230
+      playerSprites_1: 1579569654
+      playerSprites_2: 606115156
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

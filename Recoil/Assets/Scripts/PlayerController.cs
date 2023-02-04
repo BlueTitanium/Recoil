@@ -6,15 +6,23 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController p;
+
     public float maxHP = 3f;
     public float curHP = 3f;
     public Image healthBar;
+    public Animation healthBarAnim;
+    public float canTakeDamage = 0; // can only take damage while 0; used for i-frames
+    public Animation bodyAnim;
 
     public Rigidbody2D rb2d;
     public float speed = 4f;
     public float maxHorizontalSpeed = 5f;
     public float recoilAmount = 4f;
     public Transform gun;
+    public Animator gunAnimator;
+    public Transform wheel;
+    public float rotationAmount = 5f;
 
     public bool isGrounded = false;
     public Transform GroundCheck1; // Put the prefab of the ground here
@@ -24,20 +32,31 @@ public class PlayerController : MonoBehaviour
     public int bulletsLeft = 4;
     public GameObject bulletPrefab;
     public bool reloading = false;
+    public float cooldown = .5f;
+    public float cooldownLeft = 0f;
     public Transform spawnPoint;
     public AmmoUI ammoUI;
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        p = this;
         curHP = maxHP;
         healthBar.fillAmount = curHP / maxHP;
     }
 
     public void TakeDamage(float damage)
     {
-        curHP -= damage;
-        healthBar.fillAmount = curHP / maxHP;
+        if(canTakeDamage <= 0)
+        {
+            healthBarAnim.Play();
+            bodyAnim.Play();
+            curHP -= damage;
+            healthBar.fillAmount = curHP / maxHP;
+            canTakeDamage += .3f;
+        }
+        
         if(curHP <= 0)
         {
             StartCoroutine(Die());
@@ -56,23 +75,14 @@ public class PlayerController : MonoBehaviour
         {
             RestartLevel();
         }
-        
+
         isGrounded = Physics2D.OverlapCircle(GroundCheck1.position, 1f, groundLayer);
         float horizontal = Input.GetAxis("Horizontal");
-        if (horizontal < 0)
-        {
-            transform.localScale = new Vector2(-1, 1);
-            gun.localScale = new Vector2(-1, 1);
-        }
-        if (horizontal > 0)
-        {
-            transform.localScale = new Vector2(1, 1);
-            gun.localScale = new Vector2(1, 1);
-        }
         //rb2d.velocity = new Vector2(horizontal * speed, rb2d.velocity.y);
-        if (isGrounded && (Mathf.Abs(rb2d.velocity.x) < maxHorizontalSpeed / 2 || Mathf.Sign(horizontal) != Mathf.Sign(rb2d.velocity.x)))
+        if (canTakeDamage <= 0 && isGrounded && (Mathf.Abs(rb2d.velocity.x) < maxHorizontalSpeed / 2 || Mathf.Sign(horizontal) != Mathf.Sign(rb2d.velocity.x)))
             rb2d.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
-        
+
+        //ROTATE GUN
         var mousePos = Input.mousePosition;
         mousePos.z = 4f;
         var objectPos = Camera.main.WorldToScreenPoint(gun.position);
@@ -81,33 +91,59 @@ public class PlayerController : MonoBehaviour
         var angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
         gun.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        if (!reloading && Input.GetMouseButtonDown(0) && bulletsLeft > 0)
+        //SHOOT
+        if (!reloading && Input.GetMouseButtonDown(0) && bulletsLeft > 0 && cooldownLeft <= 0)
         {
-            rb2d.AddForce(-mousePos.normalized*recoilAmount, ForceMode2D.Impulse);
+            gunAnimator.SetTrigger("Shoot");
+            rb2d.AddForce(-mousePos.normalized * recoilAmount, ForceMode2D.Impulse);
             bulletsLeft--;
             Instantiate(bulletPrefab, spawnPoint.position, gun.rotation);
             ammoUI.removeAmmo();
+            cooldownLeft = cooldown;
         }
-        if((bulletsLeft <= 0 || (Input.GetMouseButtonDown(1) && bulletsLeft != maxBullets)) && !reloading && isGrounded)
+        //RELOAD
+        if ((bulletsLeft <= 0 || (Input.GetMouseButtonDown(1) && bulletsLeft != maxBullets)) && !reloading && isGrounded)
         {
             reloading = true;
             StartCoroutine(ReloadGun(1f));
         }
-        if(rb2d.velocity.x > maxHorizontalSpeed)
+
+        //ESSENTIALLY LIMITING VELOCITY
+        if (rb2d.velocity.x > maxHorizontalSpeed)
         {
             rb2d.velocity = new Vector2(maxHorizontalSpeed, rb2d.velocity.y);
-        } 
+        }
         else if (rb2d.velocity.x < -maxHorizontalSpeed)
         {
             rb2d.velocity = new Vector2(-maxHorizontalSpeed, rb2d.velocity.y);
         }
+        //SHOWING WHEEL ROTATION
+        if (rb2d.velocity.x > 0)
+        {
+            wheel.eulerAngles = new Vector3(0, 0, wheel.eulerAngles.z - rotationAmount * rb2d.velocity.x);
+        }
+        else if (rb2d.velocity.x < 0)
+        {
+            wheel.eulerAngles = new Vector3(0, 0, wheel.eulerAngles.z - rotationAmount * rb2d.velocity.x);
+        }
 
+        //COOLDOWN TICKS
+        if (cooldownLeft > 0)
+        {
+            cooldownLeft -= Time.deltaTime;
+        }
+        if(canTakeDamage > 0)
+        {
+            canTakeDamage -= Time.deltaTime;
+        }        
     }
 
     IEnumerator ReloadGun(float t)
     {
-        yield return new WaitForSeconds(t);
-        ammoUI.reload();
+        StartCoroutine(ammoUI.reload(t));
+        yield return new WaitForSeconds(.1f);
+        gunAnimator.SetTrigger("Reload");
+        yield return new WaitForSeconds(t-.1f);
         bulletsLeft = maxBullets;
         reloading = false;
     }
