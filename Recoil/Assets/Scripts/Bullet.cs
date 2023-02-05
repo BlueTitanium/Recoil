@@ -25,7 +25,8 @@ public class Bullet : MonoBehaviour
     {
         if (collision.CompareTag("Ground"))
         {
-            Instantiate(explosion, transform.position, explosion.transform.rotation);
+            if (Toggles.ParticleEffects)
+                Instantiate(explosion, transform.position, explosion.transform.rotation);
             Destroy(gameObject);
             CameraShake.cs.cameraShake(.2f, 1.5f, false);
         }
@@ -34,7 +35,8 @@ public class Bullet : MonoBehaviour
     {
         if (collision.CompareTag("Ground"))
         {
-            Instantiate(explosion, transform.position, explosion.transform.rotation);
+            if (Toggles.ParticleEffects)
+                Instantiate(explosion, transform.position, explosion.transform.rotation);
             Destroy(gameObject);
             CameraShake.cs.cameraShake(.2f, 1.5f, false);
         }

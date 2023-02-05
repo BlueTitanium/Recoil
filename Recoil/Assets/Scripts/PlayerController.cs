@@ -40,6 +40,9 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem shot;
     public ParticleSystem smoke;
 
+    public AudioSource aud;
+    public AudioClip shoot, reload, hurt;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,9 +55,14 @@ public class PlayerController : MonoBehaviour
     {
         if(canTakeDamage <= 0)
         {
+            aud.Stop();
+            aud.PlayOneShot(hurt);
             CameraShake.cs.cameraShake(.5f, 1.7f);
-            healthBarAnim.Play();
-            bodyAnim.Play();
+            if (Toggles.Animation)
+            {
+                healthBarAnim.Play();
+                bodyAnim.Play();
+            }
             curHP -= damage;
             healthBar.fillAmount = curHP / maxHP;
             canTakeDamage += .3f;
@@ -68,88 +76,101 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator Die()
     {
+
+        GameManager.gm.LoseGame();
         yield return null;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    RestartLevel();
+        //}
+        if (!(GameManager.gm.paused || !GameManager.gm.started))
         {
-            RestartLevel();
-        }
+            isGrounded = Physics2D.OverlapCircle(GroundCheck1.position, 1f, groundLayer);
+            float horizontal = Input.GetAxis("Horizontal");
+            //rb2d.velocity = new Vector2(horizontal * speed, rb2d.velocity.y);
+            if (canTakeDamage <= 0 && isGrounded && (Mathf.Abs(rb2d.velocity.x) < maxHorizontalSpeed / 2 || Mathf.Sign(horizontal) != Mathf.Sign(rb2d.velocity.x)))
+                rb2d.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
 
-        isGrounded = Physics2D.OverlapCircle(GroundCheck1.position, 1f, groundLayer);
-        float horizontal = Input.GetAxis("Horizontal");
-        //rb2d.velocity = new Vector2(horizontal * speed, rb2d.velocity.y);
-        if (canTakeDamage <= 0 && isGrounded && (Mathf.Abs(rb2d.velocity.x) < maxHorizontalSpeed / 2 || Mathf.Sign(horizontal) != Mathf.Sign(rb2d.velocity.x)))
-            rb2d.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
+            //ROTATE GUN
+            var mousePos = Input.mousePosition;
+            mousePos.z = 4f;
+            var objectPos = Camera.main.WorldToScreenPoint(gun.position);
+            mousePos.x = mousePos.x - objectPos.x;
+            mousePos.y = mousePos.y - objectPos.y;
+            var angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
+            gun.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
 
-        //ROTATE GUN
-        var mousePos = Input.mousePosition;
-        mousePos.z = 4f;
-        var objectPos = Camera.main.WorldToScreenPoint(gun.position);
-        mousePos.x = mousePos.x - objectPos.x;
-        mousePos.y = mousePos.y - objectPos.y;
-        var angle = Mathf.Atan2(mousePos.y, mousePos.x) * Mathf.Rad2Deg;
-        gun.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            //SHOOT
+            if (!reloading && Input.GetMouseButtonDown(0) && bulletsLeft > 0 && cooldownLeft <= 0)
+            {
+                aud.Stop();
+                aud.PlayOneShot(shoot);
+                if (Toggles.ParticleEffects)
+                {
+                    shot.Play();
+                    smoke.Play();
+                }
+                if (Toggles.Animation)
+                    gunAnimator.SetTrigger("Shoot");
+                rb2d.AddForce(-mousePos.normalized * recoilAmount, ForceMode2D.Impulse);
+                bulletsLeft--;
+                Instantiate(bulletPrefab, spawnPoint.position, gun.rotation);
+                ammoUI.removeAmmo();
+                cooldownLeft = cooldown;
+                CameraShake.cs.cameraShake(.3f, 1.5f);
+            }
+            //RELOAD
+            if ((bulletsLeft <= 0 || (Input.GetMouseButtonDown(1) && bulletsLeft != maxBullets)) && !reloading && isGrounded)
+            {
+                
+                reloading = true;
+                StartCoroutine(ReloadGun(1f));
+            }
 
-        //SHOOT
-        if (!reloading && Input.GetMouseButtonDown(0) && bulletsLeft > 0 && cooldownLeft <= 0)
-        {
-            shot.Play();
-            smoke.Play();
-            gunAnimator.SetTrigger("Shoot");
-            rb2d.AddForce(-mousePos.normalized * recoilAmount, ForceMode2D.Impulse);
-            bulletsLeft--;
-            Instantiate(bulletPrefab, spawnPoint.position, gun.rotation);
-            ammoUI.removeAmmo();
-            cooldownLeft = cooldown;
-            CameraShake.cs.cameraShake(.3f, 1.5f);
+            //ESSENTIALLY LIMITING VELOCITY
+            if (rb2d.velocity.x > maxHorizontalSpeed)
+            {
+                rb2d.velocity = new Vector2(maxHorizontalSpeed, rb2d.velocity.y);
+            }
+            else if (rb2d.velocity.x < -maxHorizontalSpeed)
+            {
+                rb2d.velocity = new Vector2(-maxHorizontalSpeed, rb2d.velocity.y);
+            }
+            //SHOWING WHEEL ROTATION
+            if (rb2d.velocity.x > 0)
+            {
+                wheel.eulerAngles = new Vector3(0, 0, wheel.eulerAngles.z - rotationAmount * rb2d.velocity.x);
+            }
+            else if (rb2d.velocity.x < 0)
+            {
+                wheel.eulerAngles = new Vector3(0, 0, wheel.eulerAngles.z - rotationAmount * rb2d.velocity.x);
+            }
+            smoke.transform.position = spawnPoint.position;
         }
-        //RELOAD
-        if ((bulletsLeft <= 0 || (Input.GetMouseButtonDown(1) && bulletsLeft != maxBullets)) && !reloading && isGrounded)
-        {
-            reloading = true;
-            StartCoroutine(ReloadGun(1f));
-        }
-
-        //ESSENTIALLY LIMITING VELOCITY
-        if (rb2d.velocity.x > maxHorizontalSpeed)
-        {
-            rb2d.velocity = new Vector2(maxHorizontalSpeed, rb2d.velocity.y);
-        }
-        else if (rb2d.velocity.x < -maxHorizontalSpeed)
-        {
-            rb2d.velocity = new Vector2(-maxHorizontalSpeed, rb2d.velocity.y);
-        }
-        //SHOWING WHEEL ROTATION
-        if (rb2d.velocity.x > 0)
-        {
-            wheel.eulerAngles = new Vector3(0, 0, wheel.eulerAngles.z - rotationAmount * rb2d.velocity.x);
-        }
-        else if (rb2d.velocity.x < 0)
-        {
-            wheel.eulerAngles = new Vector3(0, 0, wheel.eulerAngles.z - rotationAmount * rb2d.velocity.x);
-        }
-
         //COOLDOWN TICKS
         if (cooldownLeft > 0)
         {
             cooldownLeft -= Time.deltaTime;
         }
-        if(canTakeDamage > 0)
+        if (canTakeDamage > 0)
         {
             canTakeDamage -= Time.deltaTime;
         }
-        smoke.transform.position = spawnPoint.position;
     }
 
     IEnumerator ReloadGun(float t)
     {
         StartCoroutine(ammoUI.reload(t));
         yield return new WaitForSeconds(.1f);
-        gunAnimator.SetTrigger("Reload");
+        aud.Stop();
+        aud.PlayOneShot(reload);
+        if (Toggles.Animation)
+            gunAnimator.SetTrigger("Reload");
         yield return new WaitForSeconds(t-.1f);
         bulletsLeft = maxBullets;
         reloading = false;
