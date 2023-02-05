@@ -5,7 +5,9 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 8f;
-    public Rigidbody2D rb2d; 
+    public Rigidbody2D rb2d;
+    public GameObject explosion;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,14 +25,18 @@ public class Bullet : MonoBehaviour
     {
         if (collision.CompareTag("Ground"))
         {
+            Instantiate(explosion, transform.position, explosion.transform.rotation);
             Destroy(gameObject);
+            CameraShake.cs.cameraShake(.2f, 1.5f, false);
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Ground"))
         {
+            Instantiate(explosion, transform.position, explosion.transform.rotation);
             Destroy(gameObject);
+            CameraShake.cs.cameraShake(.2f, 1.5f, false);
         }
     }
 }

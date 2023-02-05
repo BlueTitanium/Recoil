@@ -36,7 +36,9 @@ public class PlayerController : MonoBehaviour
     public float cooldownLeft = 0f;
     public Transform spawnPoint;
     public AmmoUI ammoUI;
-    
+
+    public ParticleSystem shot;
+    public ParticleSystem smoke;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +52,7 @@ public class PlayerController : MonoBehaviour
     {
         if(canTakeDamage <= 0)
         {
+            CameraShake.cs.cameraShake(.5f, 1.7f);
             healthBarAnim.Play();
             bodyAnim.Play();
             curHP -= damage;
@@ -94,12 +97,15 @@ public class PlayerController : MonoBehaviour
         //SHOOT
         if (!reloading && Input.GetMouseButtonDown(0) && bulletsLeft > 0 && cooldownLeft <= 0)
         {
+            shot.Play();
+            smoke.Play();
             gunAnimator.SetTrigger("Shoot");
             rb2d.AddForce(-mousePos.normalized * recoilAmount, ForceMode2D.Impulse);
             bulletsLeft--;
             Instantiate(bulletPrefab, spawnPoint.position, gun.rotation);
             ammoUI.removeAmmo();
             cooldownLeft = cooldown;
+            CameraShake.cs.cameraShake(.3f, 1.5f);
         }
         //RELOAD
         if ((bulletsLeft <= 0 || (Input.GetMouseButtonDown(1) && bulletsLeft != maxBullets)) && !reloading && isGrounded)
@@ -135,7 +141,8 @@ public class PlayerController : MonoBehaviour
         if(canTakeDamage > 0)
         {
             canTakeDamage -= Time.deltaTime;
-        }        
+        }
+        smoke.transform.position = spawnPoint.position;
     }
 
     IEnumerator ReloadGun(float t)
