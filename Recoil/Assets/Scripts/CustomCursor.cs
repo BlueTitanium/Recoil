@@ -16,10 +16,16 @@ public class CustomCursor : MonoBehaviour
 
     void Update()
     {
-        transform.position = Input.mousePosition + mDisplacement;
-        if (Input.GetMouseButtonDown(0))
+        if (Cursor.visible)
         {
-            a.Play();
+            Cursor.visible = false;
+        }
+        transform.position = Input.mousePosition + mDisplacement;
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
+        {
+            if (Toggles.Animation)
+                a.Play();
+            GetComponent<AudioSource>().Play();
         }
         crosshair.fillAmount = (PlayerController.p.cooldown - PlayerController.p.cooldownLeft) / PlayerController.p.cooldown;
     }

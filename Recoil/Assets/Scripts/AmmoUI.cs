@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AmmoUI : MonoBehaviour
 {
     public GameObject[] ammoIcons;
+    public Vector2[] originalSpots;
+    public Vector3 originalScale;
+    public Color originalColor;
     int curIndex = 0;
 
     // Start is called before the first frame update
@@ -21,8 +25,10 @@ public class AmmoUI : MonoBehaviour
 
     public void removeAmmo()
     {
-        ammoIcons[curIndex].GetComponent<Animation>().Play("Ammo_Drop");
-        //ammoIcons[curIndex].SetActive(false);
+        if (Toggles.Animation)
+            ammoIcons[curIndex].GetComponent<Animation>().Play("Ammo_Drop");
+        else
+            ammoIcons[curIndex].SetActive(false);
         curIndex++;
     }
 
@@ -33,10 +39,17 @@ public class AmmoUI : MonoBehaviour
             removeAmmo();
         }
         yield return new WaitForSeconds(t);
-        foreach(var a in ammoIcons)
+        for(int i = 0; i < ammoIcons.Length; i++)
         {
-            a.GetComponent<Animation>().Play("Ammo_Back");
-            //a.SetActive(true);
+            if (Toggles.Animation)
+                ammoIcons[i].GetComponent<Animation>().Play("Ammo_Back");
+            else
+            {
+                ammoIcons[i].SetActive(true);
+                ammoIcons[i].transform.localPosition = originalSpots[i];
+                ammoIcons[i].transform.localScale = originalScale;
+                ammoIcons[i].GetComponent<Image>().color = originalColor;
+            }
         }
         curIndex = 0;
     }

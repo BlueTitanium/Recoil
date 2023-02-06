@@ -54,7 +54,8 @@ public class SlimeAI : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(Random.Range(1f, 5f));
+            yield return new WaitUntil(() => !(GameManager.gm.paused || !GameManager.gm.started));
             _rigidbody.AddForce(new Vector2(transform.localScale.x * 100, 100));
         }
     }
