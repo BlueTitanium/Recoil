@@ -9,7 +9,7 @@ public class SlimeAI : MonoBehaviour
     public Transform castPoint;
     Animator _animator;
     Rigidbody2D _rigidbody;
-    
+
     public LayerMask groundLayer;
     public LayerMask wallLayer;
     bool isGrounded;
@@ -54,7 +54,7 @@ public class SlimeAI : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(1f, 5f));
+            yield return new WaitForSeconds(2f);
             _rigidbody.AddForce(new Vector2(transform.localScale.x * 100, 100));
         }
     }

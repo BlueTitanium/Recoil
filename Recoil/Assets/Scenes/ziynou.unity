@@ -22000,7 +22000,7 @@ GameObject:
   m_Layer: 0
   m_Name: Shootpoint
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -22012,7 +22012,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476278248}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.01, y: 0.58, z: 0}
+  m_LocalPosition: {x: -0.01, y: 0.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -31786,13 +31786,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   explosion: {fileID: 0}
+  castPoint: {fileID: 776284046}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   wallLayer:
     serializedVersion: 2
     m_Bits: 128
-  castPoint: {fileID: 776284046}
 --- !u!212 &952465303
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -38940,7 +38940,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887966234}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.76, y: 1.28, z: 0}
+  m_LocalPosition: {x: -1.76, y: 1.48, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
