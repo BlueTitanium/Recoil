@@ -60,8 +60,14 @@ public class PlayerController : MonoBehaviour
             CameraShake.cs.cameraShake(.5f, 1.7f);
             if (Toggles.Animation)
             {
-                healthBarAnim.Play();
-                bodyAnim.Play();
+                if(damage!= 0)
+                {
+                    healthBarAnim.Play();
+                    bodyAnim.Play("Player_TakeDamage");
+                } else
+                {
+                    bodyAnim.Play("Player_Bounce");
+                }
             }
             curHP -= damage;
             healthBar.fillAmount = curHP / maxHP;

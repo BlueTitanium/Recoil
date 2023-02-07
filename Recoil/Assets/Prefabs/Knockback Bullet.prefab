@@ -102,7 +102,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 8
   rb2d: {fileID: 3133398244865767013}
-  explosion: {fileID: 3123831178573756454, guid: 1cf9710b05358c543a70ae6fcf3560d2, type: 3}
+  explosion: {fileID: 3123831178573756454, guid: d1c02c6bd1075c14aac7129948d6d11b, type: 3}
+  playerBullet: 0
 --- !u!61 &3026611740945188405
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -163,4 +164,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  knockbackStrength: 5
+  knockbackStrength: 10

@@ -22,11 +22,13 @@ public class DamageCollider : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
+            
             PlayerController.p.TakeDamage(damage);
             //get direction between this object and player and knock it back
             Vector3 dir = transform.position - PlayerController.p.transform.position;
             PlayerController.p.rb2d.velocity = Vector2.zero;
             PlayerController.p.rb2d.AddForce(-dir * knockbackStrength, ForceMode2D.Impulse);
+            
         }
     }
 
