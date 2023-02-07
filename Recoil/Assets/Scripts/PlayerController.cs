@@ -53,15 +53,21 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if(canTakeDamage <= 0)
+        if(canTakeDamage <= 0 && !GameManager.gm.ended)
         {
             aud.Stop();
             aud.PlayOneShot(hurt);
             CameraShake.cs.cameraShake(.5f, 1.7f);
             if (Toggles.Animation)
             {
-                healthBarAnim.Play();
-                bodyAnim.Play();
+                if(damage!= 0)
+                {
+                    healthBarAnim.Play();
+                    bodyAnim.Play("Player_TakeDamage");
+                } else
+                {
+                    bodyAnim.Play("Player_Bounce");
+                }
             }
             curHP -= damage;
             healthBar.fillAmount = curHP / maxHP;

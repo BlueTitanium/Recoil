@@ -7,6 +7,7 @@ public class Bullet : MonoBehaviour
     public float speed = 8f;
     public Rigidbody2D rb2d;
     public GameObject explosion;
+    public bool playerBullet = false;
 
     // Start is called before the first frame update
     void Start()
@@ -23,7 +24,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ground"))
+        if (collision.CompareTag("Ground") || (collision.CompareTag("Player")&&!playerBullet))
         {
             if (Toggles.ParticleEffects)
                 Instantiate(explosion, transform.position, explosion.transform.rotation);
@@ -33,7 +34,7 @@ public class Bullet : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ground"))
+        if (collision.CompareTag("Ground") || (collision.CompareTag("Player") && !playerBullet))
         {
             if (Toggles.ParticleEffects)
                 Instantiate(explosion, transform.position, explosion.transform.rotation);

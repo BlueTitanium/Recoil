@@ -102,7 +102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 8
   rb2d: {fileID: 3133398244865767013}
-  explosion: {fileID: 3123831178573756454, guid: 1cf9710b05358c543a70ae6fcf3560d2, type: 3}
+  explosion: {fileID: 3123831178573756454, guid: a7adaaec44241f745a1ad833d564d795, type: 3}
 --- !u!61 &3026611740945188405
 BoxCollider2D:
   m_ObjectHideFlags: 0
