@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     public Toggle MotionBlur;
     public Toggle ParticleEffects;
     public GameObject[] InWorldParticles;
+    public Animation[] persistentAnims;
     public Toggle Animation;
     public Toggle Vignette;
     public Toggle FilmGrain;
@@ -202,6 +203,16 @@ public class GameManager : MonoBehaviour
     public void OnAnimationToggle()
     {
         Toggles.Animation = Animation.isOn;
+        foreach (Animation o in persistentAnims)
+        {
+            if (Toggles.Animation)
+            {
+                o.Play();
+            } else
+            {
+                o.Stop();
+            }
+        }
     }
     public void OnVignetteToggle()
     {
