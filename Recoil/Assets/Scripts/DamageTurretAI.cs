@@ -21,7 +21,9 @@ public class DamageTurretAI : MonoBehaviour
 
     IEnumerator Shoot()
     {
-        yield return new WaitForSeconds(2f);
-        Instantiate(bulletPrefab, spawnPoint.position);
+        yield return new WaitForSeconds(1.5f);
+        yield return new WaitUntil(() => !(GameManager.gm.paused || !GameManager.gm.started));
+        Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
+        StartCoroutine(Shoot());
     }
 }

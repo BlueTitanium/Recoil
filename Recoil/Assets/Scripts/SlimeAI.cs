@@ -5,25 +5,20 @@ using UnityEngine;
 public class SlimeAI : MonoBehaviour
 {
     public GameObject explosion;
-    Transform player;
     public Transform castPoint;
     Animator _animator;
     Rigidbody2D _rigidbody;
-
     public LayerMask groundLayer;
     public LayerMask wallLayer;
     bool isGrounded;
     bool isWall;
     float groundCheckDist = 0.3f;
+    [SerializeField] float moveSpeed = 1f;
 
-    // Start is called before the first frame update
     void Start()
     {
         // _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody2D>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        StartCoroutine(SlimeMove());
-        
     }
 
     private void FixedUpdate() 
@@ -32,31 +27,17 @@ public class SlimeAI : MonoBehaviour
         isWall = Physics2D.OverlapCircle(castPoint.position, groundCheckDist, wallLayer);
     }
 
-    // Update is called once per frame
     void Update()
     {
-
+        _rigidbody.velocity = new Vector2(moveSpeed * transform.localScale.x, _rigidbody.velocity.y);
+        if (GameManager.gm.paused || !GameManager.gm.started)
+        {
+            _rigidbody.velocity = new Vector2(0,0);
+        }
         // Flips sprite if not grounded / hitting wall
-        if (!isGrounded || isWall)
+        else if (!isGrounded || isWall)
         {
             transform.localScale *= new Vector2(-1, 1);
-        }
-
-        // Flips sprite to face player direction
-        // else if (player.position.x > transform.position.x && transform.localScale.x < 0 ||
-        // player.position.x < transform.position.x && transform.localScale.x > 0) 
-        // {
-        //     transform.localScale *= new Vector2(-1,1);
-        // }
-    }
-
-    IEnumerator SlimeMove()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(Random.Range(1f, 5f));
-            yield return new WaitUntil(() => !(GameManager.gm.paused || !GameManager.gm.started));
-            _rigidbody.AddForce(new Vector2(transform.localScale.x * 100, 100));
         }
     }
 
@@ -69,6 +50,6 @@ public class SlimeAI : MonoBehaviour
             // _animator.SetTrigger("Die");
             Destroy(gameObject, .15f);
         }
-        
+    
     }
-}
+}   
