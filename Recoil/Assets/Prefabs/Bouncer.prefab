@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1421425696714101155}
   - component: {fileID: 656826047}
   - component: {fileID: 656826046}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Bouncer
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1421425696714101156}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -6.5999, y: -0.368, z: 0}
-  m_LocalScale: {x: 4.9827476, y: 0.13925956, z: 1}
+  m_LocalScale: {x: 1.94, y: 0.13925956, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 645780675
   m_SortingLayer: 1
   m_SortingOrder: -3
-  m_Sprite: {fileID: 7482667652216324306, guid: f5eb5c5ae447f244caa31cd5e37ec7b0, type: 3}
+  m_Sprite: {fileID: 1139181921, guid: db1a624846a59d548bbb413392bd0767, type: 3}
   m_Color: {r: 0.4552332, g: 0.6226415, b: 0.59372884, a: 1}
   m_FlipX: 0
   m_FlipY: 0

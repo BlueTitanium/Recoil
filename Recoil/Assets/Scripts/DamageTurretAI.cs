@@ -6,7 +6,8 @@ public class DamageTurretAI : MonoBehaviour
 {
      public GameObject bulletPrefab;
      public Transform spawnPoint;
-
+    public ParticleSystem shotEffect;
+    public Animation anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -21,8 +22,13 @@ public class DamageTurretAI : MonoBehaviour
 
     IEnumerator Shoot()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.15f);
         yield return new WaitUntil(() => !(GameManager.gm.paused || !GameManager.gm.started) && GetComponent<Renderer>().isVisible);
+        if (Toggles.Animation)
+            anim.Play();
+        yield return new WaitForSeconds(1.5f);
+        if(Toggles.ParticleEffects)
+            shotEffect.Play();
         Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
         StartCoroutine(Shoot());
     }

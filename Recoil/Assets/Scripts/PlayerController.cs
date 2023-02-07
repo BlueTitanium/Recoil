@@ -64,14 +64,15 @@ public class PlayerController : MonoBehaviour
                 {
                     healthBarAnim.Play();
                     bodyAnim.Play("Player_TakeDamage");
+                    canTakeDamage += .3f;
                 } else
                 {
                     bodyAnim.Play("Player_Bounce");
+                    canTakeDamage += .05f;
                 }
             }
             curHP -= damage;
             healthBar.fillAmount = curHP / maxHP;
-            canTakeDamage += .3f;
         }
         
         if(curHP <= 0)
