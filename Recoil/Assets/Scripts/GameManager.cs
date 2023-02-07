@@ -70,7 +70,7 @@ public class GameManager : MonoBehaviour
             if (paused && !ended)
             {
                 UnpauseGame();
-            } else
+            } else if (!ended)
             {
                 PauseGame();
             }
@@ -84,17 +84,24 @@ public class GameManager : MonoBehaviour
     }
     public void LoseGame()
     {
-        GetComponent<AudioSource>().Play();
-        deathAnim.Play();
-        paused = true;
-        ended = true;
+        if (!ended)
+        {
+            GetComponent<AudioSource>().Play();
+            deathAnim.Play();
+            paused = true;
+            ended = true;
+        }
+        
     }
     public void WinGame()
     {
-        GetComponent<AudioSource>().Play();
-        victoryAnim.Play();
-        paused = true;
-        ended = true;
+        if (!ended)
+        {
+            GetComponent<AudioSource>().Play();
+            victoryAnim.Play();
+            paused = true;
+            ended = true;
+        }
     }
     public void ExitGame()
     {

@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if(canTakeDamage <= 0)
+        if(canTakeDamage <= 0 && !GameManager.gm.ended)
         {
             aud.Stop();
             aud.PlayOneShot(hurt);
