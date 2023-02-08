@@ -113,7 +113,7 @@ public class PlayerController : MonoBehaviour
             float horizontal = Input.GetAxis("Horizontal");
             //rb2d.velocity = new Vector2(horizontal * speed, rb2d.velocity.y);
             if (canTakeDamage <= 0 && isGrounded && (Mathf.Abs(rb2d.velocity.x) < maxHorizontalSpeed / 2 || Mathf.Sign(horizontal) != Mathf.Sign(rb2d.velocity.x)))
-                rb2d.AddForce(new Vector2(horizontal * speed, 0), ForceMode2D.Force);
+                rb2d.AddForce(new Vector2(horizontal * speed *Time.deltaTime, 0), ForceMode2D.Force);
 
             //ROTATE GUN
             var mousePos = Input.mousePosition;
