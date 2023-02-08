@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
         gm = this;
         Time.timeScale = 1f;
         SetSettings();
+        
     }
 
     void SetSettings()
@@ -202,6 +203,18 @@ public class GameManager : MonoBehaviour
     public void OnAnimationToggle()
     {
         Toggles.Animation = Animation.isOn;
+        SlimeAI[] slimes = FindObjectsByType<SlimeAI>(FindObjectsSortMode.None);
+        foreach (SlimeAI s in slimes)
+        {
+            if (Toggles.Animation)
+            {
+                s.anim.Play();
+            }
+            else
+            {
+                s.anim.Stop();
+            }
+        }
     }
     public void OnVignetteToggle()
     {

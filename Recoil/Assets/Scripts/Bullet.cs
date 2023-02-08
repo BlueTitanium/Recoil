@@ -24,7 +24,7 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Ground") || (collision.CompareTag("Player")&&!playerBullet))
+        if (collision.CompareTag("Ground") || (collision.CompareTag("Player")&&!playerBullet) || (playerBullet && collision.CompareTag("Enemy")))
         {
             if (Toggles.ParticleEffects)
                 Instantiate(explosion, transform.position, explosion.transform.rotation);

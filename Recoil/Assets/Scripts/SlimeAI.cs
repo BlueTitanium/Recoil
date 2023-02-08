@@ -6,7 +6,6 @@ public class SlimeAI : MonoBehaviour
 {
     public GameObject explosion;
     public Transform castPoint;
-    Animator _animator;
     Rigidbody2D _rigidbody;
     public LayerMask groundLayer;
     public LayerMask wallLayer;
@@ -14,11 +13,15 @@ public class SlimeAI : MonoBehaviour
     bool isWall;
     float groundCheckDist = 0.3f;
     [SerializeField] float moveSpeed = 1f;
+    public Animation anim;
+    public Vector3 originalScale;
+    float originalY;
+    public AudioSource jump;
 
     void Start()
     {
-        // _animator = GetComponent<Animator>();
-        _rigidbody = GetComponent<Rigidbody2D>();
+        originalY = transform.parent.position.y;
+        _rigidbody = transform.parent.GetComponent<Rigidbody2D>();
     }
 
     private void FixedUpdate() 
@@ -29,7 +32,25 @@ public class SlimeAI : MonoBehaviour
 
     void Update()
     {
-        _rigidbody.velocity = new Vector2(moveSpeed * transform.localScale.x, _rigidbody.velocity.y);
+        if((GameManager.gm.paused || !GameManager.gm.started) || !GetComponent<Renderer>().isVisible){
+            jump.volume = 0;
+        } else
+        {
+            jump.volume = .4f;
+        }
+        _rigidbody.velocity = new Vector2(moveSpeed * transform.parent.localScale.x, 0);
+        if (!anim.isPlaying)
+        {
+            transform.localScale = originalScale;
+            if(transform.parent.position.y != originalY)
+            {
+                transform.parent.position = new Vector3(transform.parent.position.x, originalY);
+            }
+            if(transform.localPosition.y != 0)
+            {
+                transform.localPosition = Vector2.zero;
+            }
+        }
         if (GameManager.gm.paused || !GameManager.gm.started)
         {
             _rigidbody.velocity = new Vector2(0,0);
@@ -37,18 +58,20 @@ public class SlimeAI : MonoBehaviour
         // Flips sprite if not grounded / hitting wall
         else if (!isGrounded || isWall)
         {
-            transform.localScale *= new Vector2(-1, 1);
+            transform.parent.localScale *= new Vector2(-1, 1);
         }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other) 
     {
         if (other.CompareTag("Bullet"))
         {
-            // Instantiate(explosion, transform.position, Quarternion.identity);
+            if(Toggles.ParticleEffects)
+                Instantiate(explosion, transform.position, explosion.transform.rotation);
             Destroy(other.gameObject);
             // _animator.SetTrigger("Die");
-            Destroy(gameObject, .15f);
+            Destroy(transform.parent.gameObject);
         }
     
     }
