@@ -30,6 +30,7 @@ public class DamageTurretAI : MonoBehaviour
         if(Toggles.ParticleEffects)
             shotEffect.Play();
         Instantiate(bulletPrefab, spawnPoint.position, spawnPoint.rotation);
+        GetComponent<AudioSource>().Play();
         StartCoroutine(Shoot());
     }
 }

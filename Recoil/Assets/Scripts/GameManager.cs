@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
     public Toggle MotionBlur;
     public Toggle ParticleEffects;
     public GameObject[] InWorldParticles;
-    public Animation[] persistentAnims;
     public Toggle Animation;
     public Toggle Vignette;
     public Toggle FilmGrain;
@@ -45,6 +44,7 @@ public class GameManager : MonoBehaviour
         gm = this;
         Time.timeScale = 1f;
         SetSettings();
+        
     }
 
     void SetSettings()
@@ -203,14 +203,16 @@ public class GameManager : MonoBehaviour
     public void OnAnimationToggle()
     {
         Toggles.Animation = Animation.isOn;
-        foreach (Animation o in persistentAnims)
+        SlimeAI[] slimes = FindObjectsByType<SlimeAI>(FindObjectsSortMode.None);
+        foreach (SlimeAI s in slimes)
         {
             if (Toggles.Animation)
             {
-                o.Play();
-            } else
+                s.anim.Play();
+            }
+            else
             {
-                o.Stop();
+                s.anim.Stop();
             }
         }
     }

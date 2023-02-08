@@ -15,9 +15,12 @@ public class SlimeAI : MonoBehaviour
     [SerializeField] float moveSpeed = 1f;
     public Animation anim;
     public Vector3 originalScale;
+    float originalY;
+    public AudioSource jump;
 
     void Start()
     {
+        originalY = transform.parent.position.y;
         _rigidbody = transform.parent.GetComponent<Rigidbody2D>();
     }
 
@@ -29,7 +32,25 @@ public class SlimeAI : MonoBehaviour
 
     void Update()
     {
+        if((GameManager.gm.paused || !GameManager.gm.started) || !GetComponent<Renderer>().isVisible){
+            jump.volume = 0;
+        } else
+        {
+            jump.volume = .4f;
+        }
         _rigidbody.velocity = new Vector2(moveSpeed * transform.parent.localScale.x, 0);
+        if (!anim.isPlaying)
+        {
+            transform.localScale = originalScale;
+            if(transform.parent.position.y != originalY)
+            {
+                transform.parent.position = new Vector3(transform.parent.position.x, originalY);
+            }
+            if(transform.localPosition.y != 0)
+            {
+                transform.localPosition = Vector2.zero;
+            }
+        }
         if (GameManager.gm.paused || !GameManager.gm.started)
         {
             _rigidbody.velocity = new Vector2(0,0);
@@ -39,10 +60,7 @@ public class SlimeAI : MonoBehaviour
         {
             transform.parent.localScale *= new Vector2(-1, 1);
         }
-        if (!anim.isPlaying)
-        {
-            transform.localScale = originalScale;
-        }
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other) 

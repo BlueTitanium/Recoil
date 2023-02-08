@@ -53,7 +53,8 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if(canTakeDamage <= 0 && !GameManager.gm.ended)
+        
+        if (canTakeDamage <= 0 && !GameManager.gm.ended)
         {
             aud.Stop();
             aud.PlayOneShot(hurt);
@@ -68,6 +69,17 @@ public class PlayerController : MonoBehaviour
                 } else
                 {
                     bodyAnim.Play("Player_Bounce");
+                    canTakeDamage += .05f;
+                }
+            }
+            else
+            {
+                if (damage != 0)
+                {
+                    canTakeDamage += .3f;
+                }
+                else
+                {
                     canTakeDamage += .05f;
                 }
             }
