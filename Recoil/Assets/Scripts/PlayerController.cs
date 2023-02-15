@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController p;
 
+    // Health
     public float maxHP = 3f;
     public float curHP = 3f;
     public Image healthBar;
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     public float canTakeDamage = 0; // can only take damage while 0; used for i-frames
     public Animation bodyAnim;
 
+    // Movement
     public Rigidbody2D rb2d;
     public float speed = 4f;
     public float maxHorizontalSpeed = 5f;
@@ -24,10 +26,12 @@ public class PlayerController : MonoBehaviour
     public Transform wheel;
     public float rotationAmount = 5f;
 
+    // Grounded
     public bool isGrounded = false;
     public Transform GroundCheck1; // Put the prefab of the ground here
     public LayerMask groundLayer; // Insert the layer here.
 
+    // Shooting
     public int maxBullets = 4;
     public int bulletsLeft = 4;
     public GameObject bulletPrefab;
@@ -37,9 +41,11 @@ public class PlayerController : MonoBehaviour
     public Transform spawnPoint;
     public AmmoUI ammoUI;
 
+    // VFX
     public ParticleSystem shot;
     public ParticleSystem smoke;
 
+    // SFX
     public AudioSource aud;
     public AudioClip shoot, reload, hurt;
 
@@ -53,7 +59,6 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        
         if (canTakeDamage <= 0 && !GameManager.gm.ended)
         {
             aud.Stop();
